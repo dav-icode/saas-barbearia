@@ -1,7 +1,11 @@
-// SERVER COMPONENTS
-import Ola from "./Teste"
+import { Button } from "./_components/ui/button"
+
 const Home = () => {
-  return <h1 className="mb-5 bg-red-100 text-red-500">Red text</h1>
+  return (
+    <div>
+      <Button>Button</Button>
+    </div>
+  )
 }
 
 export default Home
