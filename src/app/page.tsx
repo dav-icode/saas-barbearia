@@ -19,12 +19,13 @@ const Home = () => {
           </Button>
         </div>
 
-        <div className="h-{150px} relative w-full">
+        <div className="h-{150px} relative mt-6 w-full rounded-xl">
           <Image
             src="/banner-01.png"
-            fill
-            className="mt-6 rounded-lg object-cover"
             alt="banner"
+            width={800}
+            height={200}
+            className="mt-6 rounded-lg object-cover"
           />
         </div>
       </div>
