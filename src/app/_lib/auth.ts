@@ -3,7 +3,7 @@ import { AuthOptions } from "next-auth"
 import { db } from "./prisma"
 import { Adapter } from "next-auth/adapters"
 import GoogleProvider from "next-auth/providers/google"
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth"
+import { DefaultSession, DefaultUser } from "next-auth"
 
 declare module "next-auth" {
   interface Session {

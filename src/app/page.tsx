@@ -11,14 +11,11 @@ import BarbershopItem from "@/components/barbershop-item"
 
 const Home = async () => {
   const barbershops = await db.barberShop.findMany({})
-  console.log("Total barbearias:", barbershops.length)
-  console.log(
-    "URLs das imagens:",
-    barbershops.map((b) => ({
-      name: b.name,
-      imageUrl: b.imageUrl,
-    })),
-  )
+  const popularBarbershops = await db.barberShop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+  })
   return (
     <div>
       <Header />
@@ -30,6 +27,48 @@ const Home = async () => {
           <Input placeholder="Faça sua busca..." />
           <Button className="bg-purple-500 text-white hover:bg-purple-600">
             <SearchIcon />
+          </Button>
+        </div>
+
+        {/* BUSCA RÁPIDA */}
+        <div className="mt-6 flex items-center justify-center gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/barba.svg" alt="cabelo" width={16} height={16} />
+            Barba
+          </Button>
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/Acabamento.svg" alt="cabelo" width={16} height={16} />
+            Acabamento
+          </Button>
+
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/barba.svg" alt="cabelo" width={16} height={16} />
+            Barba
+          </Button>
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/Acabamento.svg" alt="cabelo" width={16} height={16} />
+            Acabamento
+          </Button>
+
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/barba.svg" alt="cabelo" width={16} height={16} />
+            Barba
+          </Button>
+          <Button className="gap-2 px-5 py-5" variant="secondary">
+            <Image src="/Acabamento.svg" alt="cabelo" width={16} height={16} />
+            Acabamento
           </Button>
         </div>
 
@@ -84,6 +123,26 @@ const Home = async () => {
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
+
+        <h2 className="mt-6 mb-3 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
+          Populares
+        </h2>
+
+        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {popularBarbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
+
+        <footer>
+          <Card>
+            <CardContent className="px-5 py-6">
+              <p className="text-sm text-gray-400">
+                © 2023 Copyright <span className="font-bold">FSW Barber</span>
+              </p>
+            </CardContent>
+          </Card>
+        </footer>
       </div>
     </div>
   )
