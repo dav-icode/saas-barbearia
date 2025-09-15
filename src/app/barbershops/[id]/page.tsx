@@ -1,4 +1,5 @@
 import { db } from "@/app/_lib/prisma"
+import PhoneItem from "@/components/phone-item"
 import ServiceItem from "@/components/service-item"
 import { Button } from "@/components/ui/button"
 import { ChevronLeftIcon, MenuIcon, MapPinIcon, StarIcon } from "lucide-react"
@@ -53,6 +54,8 @@ const page = async ({ params }: BarbershopPageProps) => {
           <MenuIcon />
         </Button>
       </div>
+
+      {/* TÍTULO */}
       <div className="border-b border-solid p-5">
         <h1 className="mb-3 text-xl font-bold">{barbershop?.name}</h1>
         <div className="flex items-center gap-1">
@@ -64,6 +67,7 @@ const page = async ({ params }: BarbershopPageProps) => {
           <p className="text-sm text-gray-400">5,0 / 409 avaliações</p>
         </div>
       </div>
+
       {/* DESCRIÇÃO */}
       <div className="space-y-3 border-b border-solid p-5">
         <h2 className="mt-6 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
@@ -72,6 +76,7 @@ const page = async ({ params }: BarbershopPageProps) => {
         <p className="text-sm">{barbershop?.description}</p>
       </div>
 
+      {/* SERVIÇOS */}
       <div className="space-y-3 p-5">
         <h2 className="mt-6 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
           Serviços
@@ -81,6 +86,18 @@ const page = async ({ params }: BarbershopPageProps) => {
             <ServiceItem key={services.id} service={services} />
           ))}
         </div>
+      </div>
+
+      {/* CONTATO */}
+      <div className="space-y-3 border-b border-solid p-5">
+        <h2 className="mt-6 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
+          Contato
+        </h2>
+        <p className="space-y-3 text-sm">
+          {barbershop?.phone.map((phone) => (
+            <PhoneItem key={phone} phone={phone} />
+          ))}
+        </p>
       </div>
     </div>
   )
