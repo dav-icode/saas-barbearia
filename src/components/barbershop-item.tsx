@@ -13,7 +13,7 @@ interface BarberShopProps {
 const BarbershopItem = ({ barbershop }: BarberShopProps) => {
   return (
     <Card className="min-w-[167px] rounded-2xl pt-1">
-      <CardContent className="scroll-none p-0 px-1">
+      <CardContent className="p-0 px-1">
         {/* IMAGEM */}
         <div className="relative h-[159px] w-full">
           <Image
@@ -29,12 +29,12 @@ const BarbershopItem = ({ barbershop }: BarberShopProps) => {
         </div>
 
         {/* TEXTO */}
-        <div className="relative px-1 py-3 pb-0">
+        <div className="py-3 pb-0">
           <h3 className="text-semibold">{barbershop.name}</h3>
           <p className="mb-3 text-sm text-gray-400">{barbershop.address}</p>
           <Button
             variant="secondary"
-            className="absolute right-0 mt-1 w-full rounded-2xl"
+            className="right-0 mt-1 w-full rounded-2xl"
             asChild
           >
             <Link href={`/barbershops/${barbershop.id}`}>Reservar</Link>

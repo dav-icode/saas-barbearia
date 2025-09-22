@@ -7,17 +7,13 @@ import SideBar from "./sidebar-sheet"
 
 const Header = () => {
   return (
-    <Card>
+    <Card className="flex rounded-t-none">
       <CardContent className="flex flex-row items-center justify-between p-5">
         <Image src="/logo.png" alt="logo" height={18} width={120} />
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4"
-            >
+            <Button variant="ghost" size="icon" className="absolute right-4">
               <MenuIcon />
             </Button>
           </SheetTrigger>

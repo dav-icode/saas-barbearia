@@ -1,6 +1,4 @@
-import { SearchIcon } from "lucide-react"
 import Header from "../components/header"
-import { Input } from "../components/ui/input"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
@@ -8,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import { db } from "../app/_lib/prisma"
 import BarbershopItem from "@/components/barbershop-item"
+import Search from "@/components/search"
 
 const Home = async () => {
   const barbershops = await db.barberShop.findMany({})
@@ -23,42 +22,14 @@ const Home = async () => {
         <h2 className="text-2xl font-bold">Olá Davi!</h2>
         <p>Sexta-feira 29 de agosto</p>
 
-        <div className="mt-6 flex items-center gap-2">
-          <Input placeholder="Faça sua busca..." />
-          <Button className="bg-purple-500 text-white hover:bg-purple-600">
-            <SearchIcon />
-          </Button>
+        {/* BUSCA */}
+        <div className="mt-6">
+          <Search />
         </div>
 
         {/* BUSCA RÁPIDA */}
         <div className="mt-6 flex items-center justify-center gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
-            Cabelo
-          </Button>
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/barba.svg" alt="cabelo" width={16} height={16} />
-            Barba
-          </Button>
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/Acabamento.svg" alt="cabelo" width={16} height={16} />
-            Acabamento
-          </Button>
-
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
-            Cabelo
-          </Button>
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/barba.svg" alt="cabelo" width={16} height={16} />
-            Barba
-          </Button>
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/Acabamento.svg" alt="cabelo" width={16} height={16} />
-            Acabamento
-          </Button>
-
-          <Button className="gap-2 px-5 py-5" variant="secondary">
+          <Button className="ml-7.5 gap-2 px-5 py-5" variant="secondary">
             <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
             Cabelo
           </Button>
@@ -88,7 +59,6 @@ const Home = async () => {
         </h2>
         <Card>
           <CardContent className="flex justify-between p-0 pt-0 pb-0">
-            {" "}
             {/* ⬅️ Força todos os paddings */}
             {/* ESQUERDA */}
             <div className="flex flex-col gap-2 p-0 pl-5">

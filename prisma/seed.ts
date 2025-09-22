@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client"
-import { BarberShop } from "@prisma/client"
+import { PrismaClient } from "@/src/generated/prisma"
 
 const prisma = new PrismaClient()
 
@@ -28,6 +27,7 @@ async function seedDatabase() {
       "https://utfs.io/f/07842cfb-7b30-4fdc-accc-719618dfa1f2-17s.png",
       "https://utfs.io/f/0522fdaf-0357-4213-8f52-1d83c3dcb6cd-18e.png",
     ]
+
     // Nomes criativos para as barbearias
     const creativeNames = [
       "Barbearia Vintage",
@@ -101,35 +101,40 @@ async function seedDatabase() {
       },
     ]
 
-    // Criar 10 barbearias com nomes e endereços fictícios
-    const barbershops = []
-    for (let i = 0; i < 10; i++) {
-      const name = creativeNames[i]
-      const address = addresses[i]
-      const imageUrl = images[i]
+    // Limpar dados existentes (opcional)
+    console.log("Limpando dados existentes...")
+    await prisma.booking.deleteMany({})
+    await prisma.barbershopService.deleteMany({})
+    await prisma.barberShop.deleteMany({})
 
-      const barbershop = await prisma.barbershop.create({
+    // Criar 10 barbearias com nomes e endereços fictícios
+    console.log("Criando barbearias...")
+    const barbershops = []
+
+    for (let i = 0; i < 10; i++) {
+      const barbershop = await prisma.barberShop.create({
         data: {
-          name,
-          address,
-          imageUrl: imageUrl,
-          phones: ["(11) 99999-9999", "(11) 99999-9999"],
+          id: `barbershop_${i + 1}`,
+          name: creativeNames[i],
+          address: addresses[i],
+          imageUrl: images[i],
+          phone: ["(11) 99999-9999"],
           description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
+            "Uma barbearia moderna com os melhores profissionais da região.",
         },
       })
 
-      for (const service of services) {
+      console.log(`Criando serviços para ${creativeNames[i]}...`)
+
+      for (const [index, service] of services.entries()) {
         await prisma.barbershopService.create({
           data: {
+            id: `service_${i}_${index}`, // ID específico para cada serviço
             name: service.name,
             description: service.description,
             price: service.price,
-            barbershop: {
-              connect: {
-                id: barbershop.id,
-              },
-            },
+            duration: 60, // Duração em minutos (obrigatório no seu schema)
+            barberShopId: barbershop.id, // Relacionamento com a barbearia
             imageUrl: service.imageUrl,
           },
         })
@@ -138,11 +143,24 @@ async function seedDatabase() {
       barbershops.push(barbershop)
     }
 
+    console.log(
+      `✅ Seed concluído! Criadas ${barbershops.length} barbearias com seus serviços.`,
+    )
+  } catch (error) {
+    console.error("❌ Erro ao executar o seed:", error)
+    throw error
+  } finally {
     // Fechar a conexão com o banco de dados
     await prisma.$disconnect()
-  } catch (error) {
-    console.error("Erro ao criar as barbearias:", error)
   }
 }
 
 seedDatabase()
+  .then(() => {
+    console.log("🎉 Seed executado com sucesso!")
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error("💥 Falha ao executar o seed:", error)
+    process.exit(1)
+  })

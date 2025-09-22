@@ -2,7 +2,6 @@ import { db } from "@/app/_lib/prisma"
 import PhoneItem from "@/components/phone-item"
 import ServiceItem from "@/components/service-item"
 import SideBar from "@/components/sidebar-sheet"
-
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
@@ -15,14 +14,12 @@ interface BarbershopPageProps {
   }
 }
 const page = async ({ params }: BarbershopPageProps) => {
-  // chamar o banco de dados
-
   const barbershop = await db.barberShop.findUnique({
     where: {
       id: params.id,
     },
     include: {
-      services: true,
+      BarbershopService: true,
     },
   })
 
@@ -89,7 +86,7 @@ const page = async ({ params }: BarbershopPageProps) => {
           Serviços
         </h2>
         <div className="space-y-4">
-          {barbershop?.services.map((services) => (
+          {barbershop?.BarbershopService.map((services) => (
             <ServiceItem key={services.id} service={services} />
           ))}
         </div>
