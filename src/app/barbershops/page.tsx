@@ -4,30 +4,32 @@ import Header from "@/components/header"
 import Search from "@/components/search"
 
 interface BarberShopPageProps {
-  searchParams: {
+  searchParams: Promise<{
     title?: string
     BarbershopService?: string
-  }
+  }>
 }
 
 const BaerberShopspage = async ({ searchParams }: BarberShopPageProps) => {
+  const params = await searchParams // ADICIONE ISSO
+
   const barbershops = await db.barberShop.findMany({
     where: {
       OR: [
-        searchParams?.title
+        params?.title // MUDE DE searchParams PARA params
           ? {
               name: {
-                contains: searchParams?.title,
+                contains: params.title, // MUDE DE searchParams PARA params
                 mode: "insensitive",
               },
             }
           : {},
-        searchParams?.BarbershopService
+        params?.BarbershopService // MUDE DE searchParams PARA params
           ? {
               BarbershopService: {
                 some: {
                   name: {
-                    contains: searchParams?.BarbershopService,
+                    contains: params.BarbershopService, // MUDE DE searchParams PARA params
                     mode: "insensitive",
                   },
                 },
@@ -48,7 +50,8 @@ const BaerberShopspage = async ({ searchParams }: BarberShopPageProps) => {
       <div className="px-5">
         <h2 className="mt-6 mb-3 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
           Resultados para &quot;
-          {searchParams?.title || searchParams?.BarbershopService}&quot;
+          {params?.title || params?.BarbershopService}&quot;{" "}
+          {/* MUDE DE searchParams PARA params */}
         </h2>
 
         <div className="mb-4 grid grid-cols-2 gap-4">

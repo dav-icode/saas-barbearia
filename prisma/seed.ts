@@ -1,5 +1,4 @@
-import { PrismaClient } from "@/src/generated/prisma"
-
+import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 async function seedDatabase() {
@@ -112,40 +111,43 @@ async function seedDatabase() {
     const barbershops = []
 
     for (let i = 0; i < 10; i++) {
-      const barbershop = await prisma.barberShop.create({
-        data: {
-          id: `barbershop_${i + 1}`,
-          name: creativeNames[i],
-          address: addresses[i],
-          imageUrl: images[i],
-          phone: ["(11) 99999-9999"],
-          description:
-            "Uma barbearia moderna com os melhores profissionais da região.",
-        },
-      })
-
-      console.log(`Criando serviços para ${creativeNames[i]}...`)
-
-      for (const [index, service] of services.entries()) {
-        await prisma.barbershopService.create({
+      for (let i = 0; i < 10; i++) {
+        const barbershop = await prisma.barberShop.create({
           data: {
-            id: `service_${i}_${index}`, // ID específico para cada serviço
-            name: service.name,
-            description: service.description,
-            price: service.price,
-            duration: 60, // Duração em minutos (obrigatório no seu schema)
-            barberShopId: barbershop.id, // Relacionamento com a barbearia
-            imageUrl: service.imageUrl,
+            id: `barbershop_${i + 1}`,
+            name: creativeNames[i],
+            address: addresses[i],
+            imageUrl: images[i],
+            phone: ["(11) 99999-9999"],
+            description:
+              "Uma barbearia moderna com os melhores profissionais da região.",
+            updatedAt: new Date(),
           },
         })
+
+        console.log(`Criando serviços para ${creativeNames[i]}...`)
+
+        for (const [index, service] of services.entries()) {
+          await prisma.barbershopService.create({
+            data: {
+              id: `service_${i}_${index}`, // ID específico para cada serviço
+              name: service.name,
+              description: service.description,
+              price: service.price,
+              duration: 60, // Duração em minutos (obrigatório no seu schema)
+              barberShopId: barbershop.id, // Relacionamento com a barbearia
+              imageUrl: service.imageUrl,
+            },
+          })
+        }
+
+        barbershops.push(barbershop)
       }
 
-      barbershops.push(barbershop)
+      console.log(
+        `✅ Seed concluído! Criadas ${barbershops.length} barbearias com seus serviços.`,
+      )
     }
-
-    console.log(
-      `✅ Seed concluído! Criadas ${barbershops.length} barbearias com seus serviços.`,
-    )
   } catch (error) {
     console.error("❌ Erro ao executar o seed:", error)
     throw error

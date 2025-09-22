@@ -9,14 +9,16 @@ import Image from "next/image"
 import Link from "next/link"
 
 interface BarbershopPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 const page = async ({ params }: BarbershopPageProps) => {
+  const { id } = await params // ADICIONE ISSO
+
   const barbershop = await db.barberShop.findUnique({
     where: {
-      id: params.id,
+      id: id,
     },
     include: {
       BarbershopService: true,
