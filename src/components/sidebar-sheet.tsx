@@ -109,13 +109,18 @@ const SideBar = () => {
             className="justify-start gap-2 py-5"
             variant={"ghost"}
           >
-            <Image
-              alt={option.title}
-              src={option.imageUrl}
-              width={18}
-              height={18}
-            />
-            {option.title}
+            <Link
+              href={`/barbershops?search=${option.title}`}
+              className="flex gap-2 py-5"
+            >
+              <Image
+                alt={option.title}
+                src={option.imageUrl}
+                width={18}
+                height={18}
+              />
+              {option.title}
+            </Link>
           </Button>
         ))}
       </div>

@@ -7,6 +7,7 @@ import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import { db } from "../app/_lib/prisma"
 import BarbershopItem from "@/components/barbershop-item"
 import Search from "@/components/search"
+import Saudation from "@/components/saudation"
 
 const Home = async () => {
   const barbershops = await db.barberShop.findMany({})
@@ -15,12 +16,17 @@ const Home = async () => {
       name: "desc",
     },
   })
+  const nameUser = await db.user.findMany({
+    select: {
+      name: true,
+    },
+  })
   return (
     <div>
       <Header />
       <div className="p-5">
-        <h2 className="text-2xl font-bold">Olá Davi!</h2>
-        <p>Sexta-feira 29 de agosto</p>
+        {/* SAUDAÇÃO */}
+        <Saudation nameUser={nameUser} />
 
         {/* BUSCA */}
         <div className="mt-6">
