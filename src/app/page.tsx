@@ -8,6 +8,8 @@ import { db } from "../app/_lib/prisma"
 import BarbershopItem from "@/components/barbershop-item"
 import Search from "@/components/search"
 import Saudation from "@/components/saudation"
+import { quickSearchOptions } from "./_constants/search"
+import Link from "next/link"
 
 const Home = async () => {
   const barbershops = await db.barberShop.findMany({})
@@ -35,18 +37,24 @@ const Home = async () => {
 
         {/* BUSCA RÁPIDA */}
         <div className="mt-6 flex items-center justify-center gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-          <Button className="ml-7.5 gap-2 px-5 py-5" variant="secondary">
-            <Image src="/cabelo.svg" alt="cabelo" width={16} height={16} />
-            Cabelo
-          </Button>
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/barba.svg" alt="cabelo" width={16} height={16} />
-            Barba
-          </Button>
-          <Button className="gap-2 px-5 py-5" variant="secondary">
-            <Image src="/Acabamento.svg" alt="cabelo" width={16} height={16} />
-            Acabamento
-          </Button>
+          {quickSearchOptions.map((option) => (
+            <Button
+              className="gap-2"
+              variant="secondary"
+              key={option.title}
+              asChild
+            >
+              <Link href={`/barbershops?BarbershopService=${option.title}`}>
+                <Image
+                  src={option.imageUrl}
+                  alt={option.title}
+                  width={16}
+                  height={16}
+                />
+                {option.title}
+              </Link>
+            </Button>
+          ))}
         </div>
 
         <div className="h-{150px} relative mt-6 w-full rounded-xl">
