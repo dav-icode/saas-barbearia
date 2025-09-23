@@ -14,7 +14,7 @@ interface BarbershopPageProps {
   }>
 }
 const page = async ({ params }: BarbershopPageProps) => {
-  const { id } = await params // ADICIONE ISSO
+  const { id } = await params
 
   const barbershop = await db.barberShop.findUnique({
     where: {
