@@ -60,7 +60,7 @@ model VerificationToken {
 }
 
 model BarberShop {
-  id                String              @id
+  id                String              @id @default(cuid())
   name              String
   address           String
   phone             String[]
@@ -72,11 +72,11 @@ model BarberShop {
 }
 
 model BarbershopService {
-  id           String     @id
+  id           String     @id @default(cuid())
   name         String
   description  String
   imageUrl     String
-  price        Decimal    @db.Decimal(10, 2)
+  price        Decimal    @db.Decimal(10, 2) 
   duration     Int
   barberShopId String
   BarberShop   BarberShop @relation(fields: [barberShopId], references: [id])
@@ -84,12 +84,12 @@ model BarbershopService {
 }
 
 model Booking {
-  id                String            @id
+  id                String            @id @default(cuid())
   userId            String
   serviceId         String
   date              DateTime
   createdAt         DateTime          @default(now())
-  updatedAt         DateTime
+  updatedAt         DateTime          @updatedAt 
   BarbershopService BarbershopService @relation(fields: [serviceId], references: [id])
   User              User              @relation(fields: [userId], references: [id])
 }

@@ -25,3 +25,7 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXT_AUTH_SECRET,
 }
+
+// em callbacks podemos adicionar propriedades à sessão
+// em adapter podemos customizar o adapter do prisma
+// em providers podemos adicionar mais provedores de login (github, facebook, etc)

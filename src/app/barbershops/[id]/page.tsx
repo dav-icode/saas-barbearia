@@ -25,6 +25,10 @@ const page = async ({ params }: BarbershopPageProps) => {
     },
   })
 
+  if (!barbershop) {
+    return <div>Barbearia não encontrada</div>
+  }
+
   return (
     <div>
       {/* IMAGEM */}
@@ -89,7 +93,11 @@ const page = async ({ params }: BarbershopPageProps) => {
         </h2>
         <div className="space-y-4">
           {barbershop?.BarbershopService.map((services) => (
-            <ServiceItem key={services.id} service={services} />
+            <ServiceItem
+              barbershop={barbershop}
+              key={services.id}
+              service={services}
+            />
           ))}
         </div>
       </div>

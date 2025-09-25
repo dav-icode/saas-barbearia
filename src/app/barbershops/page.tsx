@@ -51,7 +51,6 @@ const BaerberShopspage = async ({ searchParams }: BarberShopPageProps) => {
         <h2 className="mt-6 mb-3 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
           Resultados para &quot;
           {params?.title || params?.BarbershopService}&quot;{" "}
-          {/* MUDE DE searchParams PARA params */}
         </h2>
 
         <div className="mb-4 grid grid-cols-2 gap-4">

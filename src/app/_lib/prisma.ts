@@ -1,15 +1,18 @@
 import { PrismaClient } from "@prisma/client"
 
-declare global {
-  var prisma: PrismaClient | undefined
+const globalForPrisma = globalThis as unknown as {
+  cachedPrisma: PrismaClient | undefined
 }
 
-const prisma = global.prisma || new PrismaClient()
+let prisma: PrismaClient
 
-if (process.env.NODE_ENV !== "production") {
-  global.prisma = prisma
+if (process.env.NODE_ENV === "production") {
+  prisma = new PrismaClient()
+} else {
+  if (!globalForPrisma.cachedPrisma) {
+    globalForPrisma.cachedPrisma = new PrismaClient()
+  }
+  prisma = globalForPrisma.cachedPrisma
 }
 
-// Exporta tanto como default quanto como named export 'db'
 export const db = prisma
-export default prisma
