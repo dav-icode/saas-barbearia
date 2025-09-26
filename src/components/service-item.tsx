@@ -1,26 +1,25 @@
 "use client"
 
-import { BarberShop, BarbershopService } from "@prisma/client"
+import { BarberShop, BarbershopService, Booking } from "@prisma/client"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
-import { useState } from "react"
-import { format } from "date-fns"
+import { useEffect, useState } from "react"
+import { addDays, format } from "date-fns"
 import { set } from "date-fns"
 import { createBooking } from "@/app/_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "./ui/sheet"
+import { getBookings } from "@/app/_actions/get-bookings"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -33,30 +32,83 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     undefined,
   )
 
+  const [dayBookings, setDayBookings] = useState<Booking[]>([])
+
+  const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!selectDay) return
+      const bookings = await getBookings({
+        date: selectDay,
+        serviceId: service.id,
+      })
+      setDayBookings(bookings)
+    }
+    fetch()
+  }, [selectDay, service.id])
+
   const { data } = useSession()
 
   const TIME_LIST = [
     "08:00",
+    "08:30",
     "09:00",
+    "09:30",
     "10:00",
+    "10:40",
     "11:00",
+    "11:40",
     "12:00",
+    "12:40",
+    "13:00",
+    "13:40",
     "13:00",
     "14:00",
+    "14:40",
     "15:00",
+    "15:40",
     "16:00",
+    "16:40",
     "17:00",
+    "17:40",
     "18:00",
   ]
 
+  const getTimeList = (bookings: Booking[]) => {
+    return TIME_LIST.filter((time) => {
+      const hour = Number(time.split(":")[0])
+      const minute = Number(time.split(":")[1])
+
+      const hasBookingOnCurrentTime = bookings.some(
+        (booking) =>
+          booking.date.getHours() === hour &&
+          booking.date.getMinutes() === minute,
+      )
+      if (hasBookingOnCurrentTime) {
+        return false
+      }
+      return true
+    })
+  }
+
+  {
+    /*  Atualiza o estado de selectDay */
+  }
   const handleDaySelect = (date: Date | undefined) => {
     setSelectDay(date)
   }
 
+  {
+    /* Atualiza o estado de selectedTime */
+  }
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time)
   }
 
+  {
+    /* Faz uma reserva */
+  }
   const handleCreateBooking = async () => {
     // 1. não exibir horários que já foram agendados
     // 2. Não deixar o usuario reservar se nao estiver logado
@@ -76,11 +128,19 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
         userId: (data?.user as unknown as { id: string }).id,
         date: newDate,
       })
+      handleBookingSheetOpenChange()
       toast.success("Agendamento criado com sucesso!")
     } catch (error) {
       console.log(error)
       toast.error("Erro ao criar agendamento. Tente novamente.")
     }
+  }
+
+  const handleBookingSheetOpenChange = () => {
+    setSelectDay(undefined)
+    setSelectedTime(undefined)
+    setDayBookings([])
+    setBookingSheetIsOpen(!bookingSheetIsOpen)
   }
 
   return (
@@ -109,16 +169,19 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 currency: "BRL",
               }).format(Number(service.price))}
             </p>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
-                  size="sm"
-                  variant="secondary"
-                >
-                  Reservar
-                </Button>
-              </SheetTrigger>
+            <Sheet
+              open={bookingSheetIsOpen}
+              onOpenChange={handleBookingSheetOpenChange}
+            >
+              <Button
+                className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
+                size="sm"
+                variant="secondary"
+                onClick={() => setBookingSheetIsOpen(true)}
+              >
+                Reservar
+              </Button>
+
               <SheetContent className="overflow-y-auto px-0">
                 <SheetHeader>
                   <SheetTitle>Fazer Reserva</SheetTitle>
@@ -130,6 +193,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                     locale={ptBR}
                     selected={selectDay}
                     onSelect={handleDaySelect}
+                    disabled={(date) => date < addDays(new Date(), 1)}
                     styles={{
                       head_cell: {
                         width: "100%",
@@ -159,7 +223,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
                 {selectDay && (
                   <div className="flex flex-row flex-nowrap gap-3 overflow-x-auto overflow-y-hidden border-t border-b border-solid px-1 py-1 [&::-webkit-scrollbar]:hidden">
-                    {TIME_LIST.map((time) => (
+                    {getTimeList(dayBookings).map((time) => (
                       <Button
                         key={time}
                         size="sm"
@@ -209,14 +273,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 )}
 
                 <SheetFooter className="px-5">
-                  <SheetClose asChild>
-                    <Button
-                      onClick={handleCreateBooking}
-                      disabled={!selectDay || !selectedTime || !data?.user}
-                    >
-                      Confirmar
-                    </Button>
-                  </SheetClose>
+                  <Button
+                    onClick={handleCreateBooking}
+                    disabled={!selectDay || !selectedTime || !data?.user}
+                  >
+                    Confirmar
+                  </Button>
                 </SheetFooter>
               </SheetContent>
             </Sheet>

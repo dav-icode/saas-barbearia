@@ -9,7 +9,7 @@ import Link from "next/link"
 const Header = () => {
   return (
     <Card className="flex rounded-t-none">
-      <CardContent className="flex flex-row items-center justify-between p-5">
+      <CardContent className="flex items-center p-5">
         <Link href={"/"}>
           <Image src="/logo.png" alt="logo" height={18} width={120} />
         </Link>
@@ -20,6 +20,7 @@ const Header = () => {
               <MenuIcon />
             </Button>
           </SheetTrigger>
+
           <SideBar />
         </Sheet>
       </CardContent>
