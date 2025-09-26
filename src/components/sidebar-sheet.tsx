@@ -23,7 +23,7 @@ const SideBar = () => {
   const handleLogOutClick = () => signOut()
 
   return (
-    <SheetContent className="overflow-y-auto">
+    <SheetContent className="w-[300px] sm:w-[350px]">
       <SheetHeader>
         <SheetTitle className="text-left">Menu</SheetTitle>
       </SheetHeader>
@@ -124,16 +124,18 @@ const SideBar = () => {
         ))}
       </div>
 
-      <div className="flex flex-col gap-1 border-b border-solid p-5 pt-0">
-        <Button
-          className="gap-2 py-5"
-          variant={"destructive"}
-          onClick={handleLogOutClick}
-        >
-          <LogOutIcon size={18} />
-          Sair da conta
-        </Button>
-      </div>
+      {data?.user && (
+        <div className="flex flex-col gap-1 border-b border-solid p-5 pt-0">
+          <Button
+            className="gap-2 py-5"
+            variant={"destructive"}
+            onClick={handleLogOutClick}
+          >
+            <LogOutIcon size={18} />
+            Sair da conta
+          </Button>
+        </div>
+      )}
     </SheetContent>
   )
 }

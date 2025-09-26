@@ -1,22 +1,23 @@
 "use server"
+
 import { revalidatePath } from "next/cache"
 import { db } from "../_lib/prisma"
-import { Prisma } from "@prisma/client"
+import { getServerSession } from "next-auth"
+import { authOptions } from "../_lib/auth"
 
 interface CreateBookingParams {
-  userId: string
   serviceId: string
   date: Date
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
+  const user = await getServerSession(authOptions)
+  if (!user) {
+    throw new Error("Usuário não autenticado")
+  }
   await db.booking.create({
-    data: {
-      userId: params.userId,
-      serviceId: params.serviceId,
-      date: params.date,
-    } as Prisma.BookingUncheckedCreateInput,
+    data: { ...params, userId: (user.user as unknown as { id: string }).id },
   })
-
   revalidatePath("/barbershops/[id]")
+  revalidatePath("/bookings")
 }
