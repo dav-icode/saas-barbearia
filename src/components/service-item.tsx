@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import { addDays, format } from "date-fns"
 import { set } from "date-fns"
 import { createBooking } from "@/app/_actions/create-booking"
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { toast } from "sonner"
 import {
   Sheet,
@@ -20,6 +20,15 @@ import {
   SheetTitle,
 } from "./ui/sheet"
 import { getBookings } from "@/app/_actions/get-bookings"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog"
+import { LogInIcon } from "lucide-react"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -110,8 +119,6 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     /* Faz uma reserva */
   }
   const handleCreateBooking = async () => {
-    // 1. não exibir horários que já foram agendados
-    // 2. Não deixar o usuario reservar se nao estiver logado
     try {
       if (!selectDay || !selectedTime || !data?.user) return
 
@@ -143,6 +150,8 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     setBookingSheetIsOpen(!bookingSheetIsOpen)
   }
 
+  const handleLoginWithGoogleClick = () => signIn("google")
+
   return (
     <Card>
       <CardContent className="item-center flex gap-3 pt-0 pb-0">
@@ -173,14 +182,51 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
               open={bookingSheetIsOpen}
               onOpenChange={handleBookingSheetOpenChange}
             >
-              <Button
-                className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
-                size="sm"
-                variant="secondary"
-                onClick={() => setBookingSheetIsOpen(true)}
-              >
-                Reservar
-              </Button>
+              {data?.user ? (
+                <Button
+                  className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => setBookingSheetIsOpen(true)}
+                >
+                  Reservar
+                </Button>
+              ) : (
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
+                      size="sm"
+                      variant="secondary"
+                    >
+                      <LogInIcon />
+                      Sign In
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-[90%]">
+                    <DialogHeader>
+                      <DialogTitle>Faça seu login na plataforma</DialogTitle>
+                      <DialogDescription>
+                        Conecte-se usando sua conta no Google.
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <Button
+                      variant={"outline"}
+                      className="gap-2 font-bold"
+                      onClick={handleLoginWithGoogleClick}
+                    >
+                      <Image
+                        src={"/google.svg"}
+                        alt="Fazer login com Google"
+                        width={18}
+                        height={18}
+                      />
+                      Google
+                    </Button>
+                  </DialogContent>
+                </Dialog>
+              )}
 
               <SheetContent className="overflow-y-auto px-0">
                 <SheetHeader>
@@ -193,7 +239,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                     locale={ptBR}
                     selected={selectDay}
                     onSelect={handleDaySelect}
-                    disabled={(date) => date < addDays(new Date(), 1)}
+                    disabled={(date) => date < addDays(new Date(), -1)}
                     styles={{
                       head_cell: {
                         width: "100%",
