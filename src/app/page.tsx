@@ -1,34 +1,46 @@
 import Header from "../components/header"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import { db } from "../app/_lib/prisma"
 import BarbershopItem from "@/components/barbershop-item"
 import Search from "@/components/search"
-import Saudation from "@/components/saudation"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import { quickSearchOptions } from "./_constants/search"
 import Link from "next/link"
+import BookingItem from "@/components/booking-item"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
+import { getConfirmedBookings } from "./_data/get-confirmed-bookings.ts"
 
 const Home = async () => {
+  const session = await getServerSession(authOptions)
   const barbershops = await db.barberShop.findMany({})
   const popularBarbershops = await db.barberShop.findMany({
     orderBy: {
       name: "desc",
     },
   })
-  const nameUser = await db.user.findMany({
-    select: {
-      name: true,
-    },
-  })
+  const confirmedBookings = await getConfirmedBookings()
+
   return (
     <div>
+      {/* header */}
       <Header />
       <div className="p-5">
-        {/* SAUDAÇÃO */}
-        <Saudation nameUser={nameUser} />
+        {/* TEXTO */}
+        <h2 className="text-xl font-bold">
+          Olá, {session?.user ? session.user.name : "bem vindo"}!
+        </h2>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd", { locale: ptBR })}
+          </span>
+          <span>&nbsp;de&nbsp;</span>
+          <span className="capitalize">
+            {format(new Date(), "MMMM", { locale: ptBR })}
+          </span>
+        </p>
 
         {/* BUSCA */}
         <div className="mt-6">
@@ -36,7 +48,7 @@ const Home = async () => {
         </div>
 
         {/* BUSCA RÁPIDA */}
-        <div className="mt-6 flex items-center justify-center gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+        <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
             <Button
               className="gap-2"
@@ -44,12 +56,12 @@ const Home = async () => {
               key={option.title}
               asChild
             >
-              <Link href={`/barbershops?BarbershopService=${option.title}`}>
+              <Link href={`/barbershops?service=${option.title}`}>
                 <Image
                   src={option.imageUrl}
-                  alt={option.title}
                   width={16}
                   height={16}
+                  alt={option.title}
                 />
                 {option.title}
               </Link>
@@ -57,61 +69,46 @@ const Home = async () => {
           ))}
         </div>
 
-        <div className="h-{150px} relative mt-6 w-full rounded-xl">
+        {/* IMAGEM */}
+        <div className="relative mt-6 h-[150px] w-full">
           <Image
+            alt="Agende nos melhores com FSW Barber"
             src="/banner-01.png"
-            alt="banner"
-            width={800}
-            height={200}
-            className="mt-6 rounded-lg object-cover"
+            fill
+            className="rounded-xl object-cover"
           />
         </div>
 
-        {/* AGENDAMENTO */}
-        <h2 className="mt-6 mb-3 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
-          Agendamentos
-        </h2>
-        <Card>
-          <CardContent className="flex justify-between p-0 pt-0 pb-0">
-            {/* ⬅️ Força todos os paddings */}
-            {/* ESQUERDA */}
-            <div className="flex flex-col gap-2 p-0 pl-5">
-              <Badge className="w-fit bg-blue-500 text-white">Confirmado</Badge>
-              <h3 className="text-lg font-semibold">Corte de cabelo</h3>
-              <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage
-                    className="h-6 w-6 rounded-full pt-1"
-                    src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png"
-                  />
-                </Avatar>
-                <p className="text-sm">Barbearia FSW</p>
-              </div>
-            </div>
-            {/* DIREITA */}
-            <div className="flex flex-col items-center justify-center border-l-2 border-solid px-5">
-              {/* ⬅️ Padding manual à direita */}
-              <p className="text-sm">Agosto</p>
-              <p className="text-2xl font-semibold">05</p>
-              <p className="text-sm">20:00</p>
-            </div>
-          </CardContent>
-        </Card>
+        {confirmedBookings.length > 0 && (
+          <>
+            <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+              Agendamentos
+            </h2>
 
-        <h2 className="mt-6 mb-3 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
+            {/* AGENDAMENTO */}
+            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+              {confirmedBookings.map((booking) => (
+                <BookingItem
+                  key={booking.id}
+                  booking={JSON.parse(JSON.stringify(booking))}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
           Recomendados
         </h2>
-
         <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
           {barbershops.map((barbershop) => (
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
 
-        <h2 className="mt-6 mb-3 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
           Populares
         </h2>
-
         <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
           {popularBarbershops.map((barbershop) => (
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
