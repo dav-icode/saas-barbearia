@@ -95,7 +95,7 @@ const SideBar = () => {
             variant="ghost"
             asChild
           >
-            <Link href="/" legacyBehavior>
+            <Link href="/">
               <HomeIcon size={20} />
               Inicio
             </Link>
@@ -108,7 +108,7 @@ const SideBar = () => {
             variant="ghost"
             asChild
           >
-            <Link href="/bookings" legacyBehavior>
+            <Link href="/bookings">
               <CalendarIcon size={20} />
               Agendamentos
             </Link>
@@ -123,10 +123,7 @@ const SideBar = () => {
               variant="ghost"
               asChild
             >
-              <Link
-                href={`/barbershops?BarbershopService=${option.title}`}
-                legacyBehavior
-              >
+              <Link href={`/barbershops?BarbershopService=${option.title}`}>
                 <Image
                   alt={option.title}
                   src={option.imageUrl}

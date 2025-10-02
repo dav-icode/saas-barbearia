@@ -46,7 +46,7 @@ const page = async ({ params }: BarbershopPageProps) => {
           className="absolute top-4 left-4"
           asChild
         >
-          <Link href="/" legacyBehavior>
+          <Link href="/">
             <ChevronLeftIcon />
           </Link>
         </Button>

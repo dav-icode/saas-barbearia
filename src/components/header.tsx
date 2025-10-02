@@ -27,7 +27,6 @@ const Header = async () => {
           <Link
             href={"/"}
             className="relative h-6 w-28 transition-opacity duration-200 hover:opacity-80 md:h-7 md:w-32"
-            legacyBehavior
           >
             <Image
               src="/logo.png"
@@ -42,7 +41,7 @@ const Header = async () => {
           <NavigationMenu className="mx-auto hidden lg:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
+                <Link href="/">
                   <NavigationMenuLink
                     className={`${navigationMenuTriggerStyle()} hover:bg-primary/10 hover:text-primary bg-transparent transition-colors duration-200`}
                   >
@@ -51,7 +50,7 @@ const Header = async () => {
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/bookings" legacyBehavior passHref>
+                <Link href="/bookings">
                   <NavigationMenuLink
                     className={`${navigationMenuTriggerStyle()} hover:bg-primary/10 hover:text-primary bg-transparent transition-colors duration-200`}
                   >
@@ -60,7 +59,7 @@ const Header = async () => {
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/barbershops" legacyBehavior passHref>
+                <Link href="/barbershops">
                   <NavigationMenuLink
                     className={`${navigationMenuTriggerStyle()} hover:bg-primary/10 hover:text-primary bg-transparent transition-colors duration-200`}
                   >
@@ -99,7 +98,7 @@ const Header = async () => {
                 <SideBar />
               </Sheet>
             ) : (
-              <Link href="/" legacyBehavior>
+              <Link href="/">
                 <Button
                   variant="ghost"
                   className="hover:bg-primary/10 hover:text-primary gap-2 transition-all duration-200"
