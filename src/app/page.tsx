@@ -26,7 +26,6 @@ const Home = async () => {
   return (
     <div className="min-h-screen">
       <Header />
-
       <div className="space-y-6 p-5">
         {/* SAUDAÇÃO */}
         <div className="space-y-1">
@@ -60,7 +59,10 @@ const Home = async () => {
               key={option.title}
               asChild
             >
-              <Link href={`/barbershops?service=${option.title}`}>
+              <Link
+                href={`/barbershops?service=${option.title}`}
+                legacyBehavior
+              >
                 <Image
                   src={option.imageUrl}
                   width={18}

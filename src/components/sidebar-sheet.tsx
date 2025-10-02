@@ -27,7 +27,6 @@ const SideBar = () => {
       <SheetHeader>
         <SheetTitle className="text-foreground text-left">Menu</SheetTitle>
       </SheetHeader>
-
       <div className="border-border/50 flex items-center justify-between gap-3 border-b py-5">
         {data?.user ? (
           <div className="flex items-center gap-3 px-2">
@@ -89,7 +88,6 @@ const SideBar = () => {
           </div>
         )}
       </div>
-
       <div className="border-border/50 flex flex-col gap-1 border-b py-5">
         <SheetClose asChild>
           <Button
@@ -97,7 +95,7 @@ const SideBar = () => {
             variant="ghost"
             asChild
           >
-            <Link href="/">
+            <Link href="/" legacyBehavior>
               <HomeIcon size={20} />
               Inicio
             </Link>
@@ -110,14 +108,13 @@ const SideBar = () => {
             variant="ghost"
             asChild
           >
-            <Link href="/bookings">
+            <Link href="/bookings" legacyBehavior>
               <CalendarIcon size={20} />
               Agendamentos
             </Link>
           </Button>
         </SheetClose>
       </div>
-
       <div className="border-border/50 flex flex-col gap-1 border-b py-5">
         {quickSearchOptions.map((option) => (
           <SheetClose asChild key={option.title}>
@@ -126,7 +123,10 @@ const SideBar = () => {
               variant="ghost"
               asChild
             >
-              <Link href={`/barbershops?BarbershopService=${option.title}`}>
+              <Link
+                href={`/barbershops?BarbershopService=${option.title}`}
+                legacyBehavior
+              >
                 <Image
                   alt={option.title}
                   src={option.imageUrl}
@@ -140,7 +140,6 @@ const SideBar = () => {
           </SheetClose>
         ))}
       </div>
-
       {data?.user && (
         <div className="flex flex-col gap-2 py-5">
           <Button

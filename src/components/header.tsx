@@ -27,6 +27,7 @@ const Header = async () => {
           <Link
             href={"/"}
             className="relative h-6 w-28 transition-opacity duration-200 hover:opacity-80 md:h-7 md:w-32"
+            legacyBehavior
           >
             <Image
               src="/logo.png"
@@ -98,7 +99,7 @@ const Header = async () => {
                 <SideBar />
               </Sheet>
             ) : (
-              <Link href="/">
+              <Link href="/" legacyBehavior>
                 <Button
                   variant="ghost"
                   className="hover:bg-primary/10 hover:text-primary gap-2 transition-all duration-200"

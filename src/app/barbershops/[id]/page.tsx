@@ -46,7 +46,7 @@ const page = async ({ params }: BarbershopPageProps) => {
           className="absolute top-4 left-4"
           asChild
         >
-          <Link href="/">
+          <Link href="/" legacyBehavior>
             <ChevronLeftIcon />
           </Link>
         </Button>
@@ -64,7 +64,6 @@ const page = async ({ params }: BarbershopPageProps) => {
           <SideBar />
         </Sheet>
       </div>
-
       {/* TÍTULO */}
       <div className="border-b border-solid p-5">
         <h1 className="mb-3 text-xl font-bold">{barbershop?.name}</h1>
@@ -77,7 +76,6 @@ const page = async ({ params }: BarbershopPageProps) => {
           <p className="text-sm text-gray-400">5,0 / 409 avaliações</p>
         </div>
       </div>
-
       {/* DESCRIÇÃO */}
       <div className="space-y-3 border-b border-solid p-5">
         <h2 className="mt-6 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
@@ -85,7 +83,6 @@ const page = async ({ params }: BarbershopPageProps) => {
         </h2>
         <p className="text-sm">{barbershop?.description}</p>
       </div>
-
       {/* SERVIÇOS */}
       <div className="space-y-3 p-5">
         <h2 className="mt-6 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
@@ -101,7 +98,6 @@ const page = async ({ params }: BarbershopPageProps) => {
           ))}
         </div>
       </div>
-
       {/* CONTATO */}
       <div className="space-y-3 border-b border-solid p-5">
         <h2 className="mt-6 cursor-pointer text-xs font-bold text-gray-400 uppercase transition hover:text-gray-300 hover:underline">
