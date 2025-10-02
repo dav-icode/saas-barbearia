@@ -16,6 +16,7 @@ import {
 } from "./ui/dialog"
 import { signIn, signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarImage } from "./ui/avatar"
+import { ThemeToggle } from "./theme-toggle"
 
 const SideBar = () => {
   const { data } = useSession()
@@ -25,7 +26,12 @@ const SideBar = () => {
   return (
     <SheetContent className="border-border/50 bg-card/95 w-[300px] border-l backdrop-blur-md sm:w-[350px]">
       <SheetHeader>
-        <SheetTitle className="text-foreground text-left">Menu</SheetTitle>
+        <SheetTitle className="text-bold flex items-center justify-start space-x-5 text-2xl">
+          <p>Menu</p>
+          <div>
+            <ThemeToggle />
+          </div>
+        </SheetTitle>
       </SheetHeader>
       <div className="border-border/50 flex items-center justify-between gap-3 border-b py-5">
         {data?.user ? (
