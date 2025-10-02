@@ -101,23 +101,14 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     })
   }
 
-  {
-    /*  Atualiza o estado de selectDay */
-  }
   const handleDaySelect = (date: Date | undefined) => {
     setSelectDay(date)
   }
 
-  {
-    /* Atualiza o estado de selectedTime */
-  }
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time)
   }
 
-  {
-    /* Faz uma reserva */
-  }
   const handleCreateBooking = async () => {
     try {
       if (!selectDay || !selectedTime || !data?.user) return
@@ -152,26 +143,30 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   const handleLoginWithGoogleClick = () => signIn("google")
 
   return (
-    <Card>
-      <CardContent className="item-center flex gap-3 pt-0 pb-0">
+    <Card className="border-border/50 bg-card hover:border-primary/30 transition-all duration-300">
+      <CardContent className="item-center flex gap-3 pt-3 pb-3">
         {/* IMAGE ( ESQUERDA ) */}
-        <div className="relative max-h-[110px] min-h-[110px] max-w-[110px] min-w-[110px]">
+        <div className="relative max-h-[110px] min-h-[110px] max-w-[110px] min-w-[110px] overflow-hidden rounded-lg">
           <Image
             src={service.imageUrl}
             alt={service.name}
             fill
-            className="rounded-lg object-cover"
+            className="rounded-lg object-cover transition-transform duration-500 hover:scale-110"
           />
         </div>
 
         {/* DIREITA */}
-        <div className="space-y-2">
-          <h3 className="font-semibold">{service.name}</h3>
-          <p className="text-sm text-gray-400">{service.description}</p>
+        <div className="flex flex-1 flex-col justify-between space-y-2">
+          <div>
+            <h3 className="text-foreground font-semibold">{service.name}</h3>
+            <p className="text-muted-foreground line-clamp-2 text-sm">
+              {service.description}
+            </p>
+          </div>
 
-          {/* PREÇÕ E BOTÃO */}
+          {/* PREÇO E BOTÃO */}
           <div className="flex items-center justify-between">
-            <p className="text-sm font-bold text-purple-500">
+            <p className="text-primary text-sm font-bold">
               {Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",
@@ -183,7 +178,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
             >
               {data?.user ? (
                 <Button
-                  className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
+                  className="bg-secondary hover:bg-primary hover:text-primary-foreground rounded-xl font-medium transition-all duration-300"
                   size="sm"
                   variant="secondary"
                   onClick={() => setBookingSheetIsOpen(true)}
@@ -192,27 +187,29 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 </Button>
               ) : (
                 <Dialog>
-                  <DialogTrigger>
+                  <DialogTrigger asChild>
                     <Button
-                      className="flex min-w-[100px] rounded-2xl hover:bg-purple-950"
+                      className="bg-secondary hover:bg-primary hover:text-primary-foreground gap-2 rounded-xl font-medium transition-all duration-300"
                       size="sm"
                       variant="secondary"
                     >
-                      <LogInIcon />
-                      Sign In
+                      <LogInIcon className="h-4 w-4" />
+                      Entrar
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="w-[90%]">
+                  <DialogContent className="border-border/50 bg-card w-[90%]">
                     <DialogHeader>
-                      <DialogTitle>Faça seu login na plataforma</DialogTitle>
-                      <DialogDescription>
+                      <DialogTitle className="text-foreground">
+                        Faça seu login na plataforma
+                      </DialogTitle>
+                      <DialogDescription className="text-muted-foreground">
                         Conecte-se usando sua conta no Google.
                       </DialogDescription>
                     </DialogHeader>
 
                     <Button
-                      variant={"outline"}
-                      className="gap-2 font-bold"
+                      variant="outline"
+                      className="border-border/50 hover:bg-primary hover:text-primary-foreground hover:border-primary gap-2 font-medium transition-all duration-200"
                       onClick={handleLoginWithGoogleClick}
                     >
                       <Image
@@ -227,9 +224,11 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 </Dialog>
               )}
 
-              <SheetContent className="overflow-y-auto px-0">
-                <SheetHeader>
-                  <SheetTitle>Fazer Reserva</SheetTitle>
+              <SheetContent className="border-border/50 overflow-y-auto border-l px-0">
+                <SheetHeader className="px-5">
+                  <SheetTitle className="text-foreground">
+                    Fazer Reserva
+                  </SheetTitle>
                 </SheetHeader>
 
                 <div className="flex items-center justify-center overflow-hidden px-5 pt-3 pb-5">
@@ -262,18 +261,18 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                         textTransform: "capitalize",
                       },
                     }}
-                    className="rounded-md border-purple-500"
+                    className="border-border/50 rounded-md border"
                   />
                 </div>
 
                 {selectDay && (
-                  <div className="flex flex-row flex-nowrap gap-3 overflow-x-auto overflow-y-hidden border-t border-b border-solid px-1 py-1 [&::-webkit-scrollbar]:hidden">
+                  <div className="border-border/50 flex flex-row flex-nowrap gap-3 overflow-x-auto overflow-y-hidden border-t border-b px-5 py-3 [&::-webkit-scrollbar]:hidden">
                     {getTimeList(dayBookings).map((time) => (
                       <Button
                         key={time}
                         size="sm"
                         variant={selectedTime === time ? "default" : "outline"}
-                        className="flex shrink-0 rounded-full p-5"
+                        className="border-border/50 hover:border-primary/50 shrink-0 rounded-full px-4 transition-all duration-200"
                         onClick={() => handleTimeSelect(time)}
                       >
                         {time}
@@ -283,12 +282,14 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 )}
 
                 {selectedTime && selectDay && (
-                  <div className="m-2 mt-0">
-                    <Card>
+                  <div className="m-5 mt-3">
+                    <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
                       <CardContent className="space-y-3 p-3">
-                        <div className="flex items-center">
-                          <h2 className="font-bold">{service.name}</h2>
-                          <p className="ml-auto text-sm font-bold">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-foreground font-bold">
+                            {service.name}
+                          </h2>
+                          <p className="text-primary text-sm font-bold">
                             {Intl.NumberFormat("pt-BR", {
                               style: "currency",
                               currency: "BRL",
@@ -296,21 +297,31 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-center">
-                          <h2 className="text-sm text-gray-400">Data</h2>
-                          <p className="ml-auto text-sm">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-muted-foreground text-sm">
+                            Data
+                          </h2>
+                          <p className="text-foreground text-sm font-medium">
                             {format(selectDay, "d 'de' MMMM", { locale: ptBR })}
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-center">
-                          <h2 className="text-sm text-gray-400">Horário</h2>
-                          <p className="ml-auto text-sm">{selectedTime}</p>
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-muted-foreground text-sm">
+                            Horário
+                          </h2>
+                          <p className="text-foreground text-sm font-medium">
+                            {selectedTime}
+                          </p>
                         </div>
 
-                        <div className="flex items-center justify-center">
-                          <h2 className="text-sm text-gray-400">Barbearia</h2>
-                          <p className="ml-auto text-sm">{barbershop.name}</p>
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-muted-foreground text-sm">
+                            Barbearia
+                          </h2>
+                          <p className="text-foreground text-sm font-medium">
+                            {barbershop.name}
+                          </p>
                         </div>
                       </CardContent>
                     </Card>
@@ -321,6 +332,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   <Button
                     onClick={handleCreateBooking}
                     disabled={!selectDay || !selectedTime || !data?.user}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground w-full transition-all duration-200 disabled:opacity-50"
                   >
                     Confirmar
                   </Button>

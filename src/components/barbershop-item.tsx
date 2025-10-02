@@ -12,29 +12,36 @@ interface BarberShopProps {
 
 const BarbershopItem = ({ barbershop }: BarberShopProps) => {
   return (
-    <Card className="min-w-[167px] rounded-2xl pt-1">
-      <CardContent className="p-0 px-1">
+    <Card className="border-border/50 bg-card hover:border-primary/30 min-w-[167px] rounded-2xl pt-2 pb-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <CardContent className="p-0 px-1 pb-3">
         {/* IMAGEM */}
-        <div className="relative h-[159px] w-full">
+        <div className="relative h-[159px] w-full overflow-hidden rounded-2xl">
           <Image
             fill
-            className="rounded-2xl object-cover"
+            className="rounded-2xl object-cover transition-transform duration-500 hover:scale-110"
             src={barbershop.imageUrl}
             alt={barbershop.name}
           />
-          <Badge className="absolute top-2 left-2" variant="secondary">
-            <StarIcon size={12} className="fill-purple-500 text-purple-500" />
-            <p className="text-xs font-semibold text-white">5,0</p>
+          <Badge
+            className="bg-background/95 border-primary/20 hover:bg-background absolute top-2 left-2 backdrop-blur-sm"
+            variant="secondary"
+          >
+            <StarIcon size={12} className="fill-primary text-primary mr-1" />
+            <p className="text-xs font-semibold">5,0</p>
           </Badge>
         </div>
 
         {/* TEXTO */}
-        <div className="py-3 pb-0">
-          <h3 className="text-semibold">{barbershop.name}</h3>
-          <p className="mb-3 text-sm text-gray-400">{barbershop.address}</p>
+        <div className="space-y-2 px-2 py-3 pb-0">
+          <h3 className="text-foreground truncate font-semibold">
+            {barbershop.name}
+          </h3>
+          <p className="text-muted-foreground truncate text-sm">
+            {barbershop.address}
+          </p>
           <Button
             variant="secondary"
-            className="right-0 mt-1 w-full rounded-2xl"
+            className="bg-secondary hover:bg-primary hover:text-primary-foreground w-full rounded-xl font-medium transition-all duration-300"
             asChild
           >
             <Link href={`/barbershops/${barbershop.id}`}>Reservar</Link>

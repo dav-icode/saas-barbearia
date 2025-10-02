@@ -107,7 +107,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           <SheetTitle className="text-left">Informações da Reserva</SheetTitle>
         </SheetHeader>
 
-        <div className="relative mt-6 flex h-[180px] w-full items-end">
+        <div className="relative mx-2 mt-6 flex h-[180px] w-full items-end">
           <Image
             alt={`Mapa da barbearia ${booking.service.name}`}
             src="/map.png"
@@ -115,7 +115,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             className="rounded-xl object-cover"
           />
 
-          <Card className="z-50 mx-5 mb-3 w-full rounded-xl">
+          <Card className="z-50 mx-10 mb-3 w-full rounded-xl py-2">
             <CardContent className="flex items-center gap-3 px-5 py-3">
               <Avatar>
                 <AvatarImage src={BarberShop.imageUrl} />
@@ -130,13 +130,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
         <div className="mt-6">
           <Badge
-            className="w-fit"
+            className="ml-2 w-fit"
             variant={isConfirmed ? "default" : "secondary"}
           >
             {isConfirmed ? "Confirmado" : "Finalizado"}
           </Badge>
 
-          <div className="mt-6 mb-3">
+          <div className="mx-2 mt-6 mb-3">
             <BookingSummary
               barbershop={BarberShop}
               service={booking.service}
@@ -144,14 +144,14 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             />
           </div>
 
-          <div className="space-y-3">
+          <div className="ml-2 space-y-3">
             {BarberShop.phone.map((phone, index) => (
               <PhoneItem key={index} phone={phone} />
             ))}
           </div>
         </div>
-        <SheetFooter className="mt-6">
-          <div className="flex items-center gap-3">
+        <SheetFooter className="mt-2">
+          <div className="flex flex-col gap-3">
             <SheetClose asChild>
               <Button variant="outline" className="w-full">
                 Voltar
@@ -172,7 +172,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                       recuperá-la. Essa ação é irreversível.
                     </DialogDescription>
                   </DialogHeader>
-                  <DialogFooter className="flex flex-row gap-3">
+                  <DialogFooter className="flex flex-col gap-3">
                     <DialogClose asChild>
                       <Button variant="secondary" className="w-full">
                         Voltar

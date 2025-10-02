@@ -24,34 +24,38 @@ const Home = async () => {
   const confirmedBookings = await getConfirmedBookings()
 
   return (
-    <div>
-      {/* header */}
+    <div className="min-h-screen">
       <Header />
-      <div className="p-5">
-        {/* TEXTO */}
-        <h2 className="text-xl font-bold">
-          Olá, {session?.user ? session.user.name : "bem vindo"}!
-        </h2>
-        <p>
-          <span className="capitalize">
-            {format(new Date(), "EEEE, dd", { locale: ptBR })}
-          </span>
-          <span>&nbsp;de&nbsp;</span>
-          <span className="capitalize">
-            {format(new Date(), "MMMM", { locale: ptBR })}
-          </span>
-        </p>
+
+      <div className="space-y-6 p-5">
+        {/* SAUDAÇÃO */}
+        <div className="space-y-1">
+          <h2 className="text-foreground text-2xl font-bold">
+            Olá,{" "}
+            <span className="text-primary">
+              {session?.user ? session.user.name?.split(" ")[0] : "bem vindo"}
+            </span>
+            !
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            <span className="capitalize">
+              {format(new Date(), "EEEE, dd", { locale: ptBR })}
+            </span>
+            <span> de </span>
+            <span className="capitalize">
+              {format(new Date(), "MMMM", { locale: ptBR })}
+            </span>
+          </p>
+        </div>
 
         {/* BUSCA */}
-        <div className="mt-6">
-          <Search />
-        </div>
+        <Search />
 
         {/* BUSCA RÁPIDA */}
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
             <Button
-              className="gap-2"
+              className="border-border/50 hover:bg-primary hover:text-primary-foreground hover:border-primary shrink-0 gap-2 font-medium transition-all duration-300"
               variant="secondary"
               key={option.title}
               asChild
@@ -59,9 +63,10 @@ const Home = async () => {
               <Link href={`/barbershops?service=${option.title}`}>
                 <Image
                   src={option.imageUrl}
-                  width={16}
-                  height={16}
+                  width={18}
+                  height={18}
                   alt={option.title}
+                  className="opacity-80"
                 />
                 {option.title}
               </Link>
@@ -69,24 +74,25 @@ const Home = async () => {
           ))}
         </div>
 
-        {/* IMAGEM */}
-        <div className="relative mt-6 h-[150px] w-full">
+        {/* BANNER */}
+        <div className="group relative h-[150px] w-full overflow-hidden rounded-xl md:h-[200px] lg:h-[250px]">
           <Image
             alt="Agende nos melhores com FSW Barber"
             src="/banner-01.png"
             fill
-            className="rounded-xl object-cover"
+            className="rounded-xl object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+            priority
           />
         </div>
 
+        {/* AGENDAMENTOS */}
         {confirmedBookings.length > 0 && (
-          <>
-            <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          <section className="space-y-3">
+            <h2 className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
               Agendamentos
             </h2>
-
-            {/* AGENDAMENTO */}
-            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            <div className="flex gap-3 overflow-x-auto scroll-smooth [&::-webkit-scrollbar]:hidden">
               {confirmedBookings.map((booking) => (
                 <BookingItem
                   key={booking.id}
@@ -94,26 +100,32 @@ const Home = async () => {
                 />
               ))}
             </div>
-          </>
+          </section>
         )}
 
-        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
-          Recomendados
-        </h2>
-        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
-          {barbershops.map((barbershop) => (
-            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
-          ))}
-        </div>
+        {/* RECOMENDADOS */}
+        <section className="space-y-3">
+          <h2 className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
+            Recomendados
+          </h2>
+          <div className="flex gap-4 overflow-x-auto scroll-smooth pb-2 [&::-webkit-scrollbar]:hidden">
+            {barbershops.map((barbershop) => (
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+            ))}
+          </div>
+        </section>
 
-        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
-          Populares
-        </h2>
-        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
-          {popularBarbershops.map((barbershop) => (
-            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
-          ))}
-        </div>
+        {/* POPULARES */}
+        <section className="space-y-3 pb-6">
+          <h2 className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
+            Populares
+          </h2>
+          <div className="flex gap-4 overflow-x-auto scroll-smooth pb-2 [&::-webkit-scrollbar]:hidden">
+            {popularBarbershops.map((barbershop) => (
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   )

@@ -40,18 +40,19 @@ const Search = () => {
                 <Input
                   placeholder="Faça sua busca..."
                   {...field}
-                  className="w-full"
+                  className="border-border/50 bg-secondary/50 placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-secondary w-full backdrop-blur-sm transition-all duration-200"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
         <Button
-          className="bg-purple-500 text-white hover:bg-purple-600"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-md transition-all duration-200 hover:shadow-lg"
           type="submit"
+          size="icon"
         >
-          <SearchIcon />
+          <SearchIcon className="h-5 w-5" />
         </Button>
       </form>
     </Form>

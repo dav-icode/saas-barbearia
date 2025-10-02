@@ -16,20 +16,20 @@ const BaerberShopspage = async ({ searchParams }: BarberShopPageProps) => {
   const barbershops = await db.barberShop.findMany({
     where: {
       OR: [
-        params?.title // MUDE DE searchParams PARA params
+        params?.title
           ? {
               name: {
-                contains: params.title, // MUDE DE searchParams PARA params
+                contains: params.title,
                 mode: "insensitive",
               },
             }
           : {},
-        params?.BarbershopService // MUDE DE searchParams PARA params
+        params?.BarbershopService
           ? {
               BarbershopService: {
                 some: {
                   name: {
-                    contains: params.BarbershopService, // MUDE DE searchParams PARA params
+                    contains: params.BarbershopService,
                     mode: "insensitive",
                   },
                 },
