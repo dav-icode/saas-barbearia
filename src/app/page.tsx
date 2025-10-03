@@ -74,15 +74,16 @@ const Home = async () => {
         </div>
 
         {/* BANNER */}
-        <div className="group relative h-[150px] w-full overflow-hidden rounded-xl md:h-[200px] lg:h-[250px]">
-          <Image
-            alt="Agende nos melhores com FSW Barber"
-            src="/banner-01.png"
-            fill
-            className="rounded-xl object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-            priority
-          />
+        <div className="mt-6 w-full px-5">
+          <div className="relative h-[240px] max-h-[450px] w-full overflow-hidden rounded-xl sm:h-[280px] md:h-[320px] lg:h-[360px] xl:h-[400px]">
+            <Image
+              src="/banner-01.png"
+              alt="Agende nos melhores com Nimbus"
+              fill
+              className="object-cover object-left md:object-center"
+              priority
+            />
+          </div>
         </div>
 
         {/* AGENDAMENTOS */}

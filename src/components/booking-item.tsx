@@ -172,9 +172,10 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                       recuperá-la. Essa ação é irreversível.
                     </DialogDescription>
                   </DialogHeader>
-                  <DialogFooter className="flex flex-col gap-3">
+
+                  <DialogFooter className="gap-3">
                     <DialogClose asChild>
-                      <Button variant="secondary" className="w-full">
+                      <Button variant="secondary" className="min-w-[50%]">
                         Voltar
                       </Button>
                     </DialogClose>
